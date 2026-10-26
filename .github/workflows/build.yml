@@ -1,0 +1,26 @@
+name: Build WR1300 v4 firmware
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Podman
+        run: sudo apt-get update && sudo apt-get install -y podman
+      - name: Build firmware
+        run: JOBS=4 sh build.sh
+      - name: Verify artifacts
+        run: python3 scripts/verify.py dist
+      - name: Upload firmware and build metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: openwrt-25.12.6-cudy-wr1300-v4
+          path: dist/*
+          if-no-files-found: error

@@ -1,0 +1,2 @@
+# Unified diff context intentionally begins with a space, including blank lines.
+*.patch -whitespace
